@@ -27,7 +27,7 @@ public class Test {
 		for(String s:keys){
 			System.out.println(s+":"+map.get(s));
 		}*/
-		
+	
 		File file = new File("data/TS");
 		HashMap<String,Double> base = new HashMap<String,Double>();
 		base.put("ÎäÆ÷",1.0);

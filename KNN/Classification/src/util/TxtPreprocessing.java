@@ -38,6 +38,7 @@ public class TxtPreprocessing {
 		String[] words = null;
 		try {
 			//从磁盘上读取当前文本的内容
+			@SuppressWarnings("resource")
 			FileInputStream in = new FileInputStream(f);
 			byte[] by = new byte[(int) f.length()];
 			in.read(by, 0, by.length);

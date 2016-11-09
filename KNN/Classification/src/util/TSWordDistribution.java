@@ -1,12 +1,8 @@
 package util;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Set;
-import com.chenlb.mmseg4j.example.MMseg4j;
 
 /**
  * 
