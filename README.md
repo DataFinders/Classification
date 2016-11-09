@@ -9,6 +9,12 @@
 #### 2.HashMap<String,HashMap<String, Double>> wordFreguency;
 	key：文本名k1   value{HashMap<String, Double> key：词项  value：在文本k1出现的次数}
 ## 三.计算TF-IDF（秦龙）
+	单个文件的TF-IDF值
+#### HashMap<String, Double>；
 ## 四.生成初始特征值向量（秦龙）
+	for（所有文本）{
+		去重 前20个
+	}
+
 ## 五.文档向量化（赵琰）
 ## 六.计算距离、分类（赵琰）
