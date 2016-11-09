@@ -8,20 +8,22 @@ import java.util.HashMap;
 import java.util.Set;
 import com.chenlb.mmseg4j.example.MMseg4j;
 
-/*
- * 该类主要用于获得一个文档集中词项分布情况，如：获得该文档集中出现每个词项的文本个数、获得每个文档的词频信息
+/**
+ * 
+ * @author zy
+ * 该类主要用于获得训练集中词项分布情况，如：获得该文档集中出现每个词项的文本个数、获得每个文档的词频信息
+ *
  */
-public class WordDistribution {
+public class TSWordDistribution {
 	private File file;
 	private HashMap<String,Double> wordDistribution;	//存储文档集词项分布信息 ，key为词项；value为出现过该此项的文本个数
 	private HashMap<String, HashMap<String, Double>> wordFreguency;		//存储文本词频信息，key为文本名；value是一个HashMap，其key为词项，value问在该文本中出现的次数。
-	private MMseg4j mmseg;
+	private TxtPreprocessing tp ;	//TxtPreprocessing类，用于对文本的预处理
 
-	public WordDistribution(File file){
+	public TSWordDistribution(File file){
 		this.file = file;
 		wordDistribution = new HashMap<String,Double>();
 		wordFreguency = new HashMap<String,HashMap<String,Double>>();
-		mmseg = new MMseg4j();
 		run();
 	}
 	
@@ -39,8 +41,8 @@ public class WordDistribution {
 	 * 处理方法，对传入的每一个文本进行处理
 	 */
 	private void deal(File f){
-		String[] words = getWords(f);	//获得文档的分词结果
-		HashMap<String,Double> m = meger(words);	//去除重复的词，并计算词频
+		tp = new TxtPreprocessing(f);
+		HashMap<String,Double> m = tp.getWordFreguency();	//去除重复的词，并计算词频
 		Set<String> keys = m.keySet();
 		
 		//处理当前文档的分词结果，并更新词项分布
@@ -54,43 +56,6 @@ public class WordDistribution {
 		wordFreguency.put(f.getName(), m);	//存储当前文档的词频分布
 	}
 	
-	/*
-	 * 获取文本内容并分词
-	 */
-	private String[] getWords(File f){
-		String[] words = null;
-		try {
-			//从磁盘上读取当前文本的内容
-			FileInputStream in = new FileInputStream(f);
-			byte[] by = new byte[(int) f.length()];
-			in.read(by, 0, by.length);
-			String content = new String(by,"utf-8");
-			//分词
-			words = mmseg.getResult(content);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-		}
-		return words;
-	}
-	
-	/*
-	 * 去除文本分词结果的的重复项，并计算数组中词项出现的频率
-	 */
-	private HashMap<String,Double> meger(String[] words){
-		HashMap<String,Double> m = new HashMap<String,Double>();	//存储当前文本的词频分布情况，key为词项，value为改词在当前文本出现的次数
-		for(String word:words){		//遍历文本中的所有词
-			if(m.containsKey(word))		//若词项已经出现在词频分布数组，则该词项的value加1
-				m.put(word, m.get(word)+1.0);
-			else	//若改词未出现在词频分布数组，则将改词加入词频分布数组，并将改词的value置1
-				m.put(word, 1.0);
-		}
-		return m;
-	}
-	
 	public HashMap<String,Double> getWordDistribution(){
 		return this.wordDistribution;
 	}
@@ -98,5 +63,4 @@ public class WordDistribution {
 	public HashMap<String, HashMap<String, Double>> getWordFreguency() {
 		return wordFreguency;
 	}
-
 }

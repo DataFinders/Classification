@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-/*
- * 将文本转换成向量
+/**
+ * 
+ * @author zy
+ * 将文本经过预处理后的结果转换成向量
+ *
  */
 public class TxtVector {
 	List<String> base;	//初始特征向量
@@ -14,14 +17,13 @@ public class TxtVector {
 	/*
 	 * 构造函数，需要传入初始特征向量和文本分词结果
 	 */
-	public TxtVector(HashMap<String,Double> content,HashMap<String,Double> map){
+	public TxtVector(HashMap<String,Double> content,HashMap<String,Double> Base){
 		this.content = content;
 		this.base = new ArrayList<String>();
 		
-		Set<String> set = map.keySet();
+		Set<String> set = Base.keySet();
 		for(String s:set)
 			this.base.add(s);
-		
 		this.vector = new double[base.size()];
 		ToVector();
 	}

@@ -4,9 +4,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import com.chenlb.mmseg4j.example.MMseg4j;
+
+import util.TSWordDistribution;
+import util.TxtVector;
 
 public class Test {
 	public static void main(String[] args) {
@@ -24,7 +28,46 @@ public class Test {
 			System.out.println(s+":"+map.get(s));
 		}*/
 		
-		File file = new File("E:\\实验室资料\\数据挖掘\\分类算法\\k-近邻\\训练集\\10-24.txt");
+		File file = new File("data/TS");
+		HashMap<String,Double> base = new HashMap<String,Double>();
+		base.put("武器",1.0);
+		base.put("战争",1.0);
+		base.put("军队",1.0);
+		base.put("美国",1.0);
+		base.put("装备",1.0);
+		base.put("战场",1.0);
+		base.put("作战",1.0);
+		base.put("实验室",1.0);
+		base.put("导弹",1.0);
+		TSWordDistribution tsd = new TSWordDistribution(file); 
+		HashMap map = tsd.getWordFreguency();
+		Set<String> keys = map.keySet();
+		for(String key:keys){
+			HashMap m = (HashMap) map.get(key);
+			TxtVector tv = new TxtVector(m, base);
+			double[] vector = tv.getVector();
+			System.out.print(key+":---");
+			for(double d:vector)
+				System.out.print(d+" ");
+			System.out.println();
+		}
+		/*for(String key:keys){
+			System.out.println(key);
+			HashMap m = (HashMap) map.get(key);
+			Set<String> ks = m.keySet();
+			for(String k:ks){
+				System.out.print(k+"="+m.get(k)+"");
+			}
+			System.out.println();
+		}*/
+		/*HashMap map = tsd.getWordDistribution();
+		Set<String> keys = map.keySet();
+		int i=0;
+		for(String key:keys){
+			i++;
+			System.out.println(key+":"+map.get(key));
+		}
+		System.out.println(i);*/
 		/*try {
 			MMseg4j mmseg = new MMseg4j();
 			FileInputStream in = new FileInputStream(file);
