@@ -15,9 +15,9 @@ import util.TxtVector;
 public class Test {
 	public static void main(String[] args) {
 		/*HashMap<String,Double> map = new HashMap<String,Double>();
-		map.put("ÉÏº£", 1.0);
-		map.put("±±¾©",1.0);
-		String key = "±±¾©";
+		map.put("ä¸Šæµ·", 1.0);
+		map.put("åŒ—äº¬",1.0);
+		String key = "åŒ—äº¬";
 		if(map.containsKey(key)){
 			map.put(key, map.get(key)+1);
 		}else{
@@ -27,18 +27,18 @@ public class Test {
 		for(String s:keys){
 			System.out.println(s+":"+map.get(s));
 		}*/
-		
+		System.out.ptintln();
 		File file = new File("data/TS");
 		HashMap<String,Double> base = new HashMap<String,Double>();
-		base.put("ÎäÆ÷",1.0);
-		base.put("Õ½Õù",1.0);
-		base.put("¾ü¶Ó",1.0);
-		base.put("ÃÀ¹ú",1.0);
-		base.put("×°±¸",1.0);
-		base.put("Õ½³¡",1.0);
-		base.put("×÷Õ½",1.0);
-		base.put("ÊµÑéÊÒ",1.0);
-		base.put("µ¼µ¯",1.0);
+		base.put("æ­¦å™¨",1.0);
+		base.put("æˆ˜äº‰",1.0);
+		base.put("å†›é˜Ÿ",1.0);
+		base.put("ç¾Žå›½",1.0);
+		base.put("è£…å¤‡",1.0);
+		base.put("æˆ˜åœº",1.0);
+		base.put("ä½œæˆ˜",1.0);
+		base.put("å®žéªŒå®¤",1.0);
+		base.put("å¯¼å¼¹",1.0);
 		TSWordDistribution tsd = new TSWordDistribution(file); 
 		HashMap map = tsd.getWordFreguency();
 		Set<String> keys = map.keySet();
