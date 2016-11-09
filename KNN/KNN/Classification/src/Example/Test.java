@@ -10,16 +10,14 @@ import java.util.Set;
 import com.chenlb.mmseg4j.example.MMseg4j;
 
 import util.TSWordDistribution;
-import util.TxtToVector;
-//import util.TxtVector;
 import util.TxtVector;
 
 public class Test {
 	public static void main(String[] args) {
 		/*HashMap<String,Double> map = new HashMap<String,Double>();
-		map.put("æ¶“å©ƒæ£", 1.0);
-		map.put("é–æ¤¾å«",1.0);
-		String key = "é–æ¤¾å«";
+		map.put("ÉÏº£", 1.0);
+		map.put("±±¾©",1.0);
+		String key = "±±¾©";
 		if(map.containsKey(key)){
 			map.put(key, map.get(key)+1);
 		}else{
@@ -29,28 +27,27 @@ public class Test {
 		for(String s:keys){
 			System.out.println(s+":"+map.get(s));
 		}*/
-		System.out.println();
-		File file = new File("data/TrainingSet");
-		ArrayList<String> base = new ArrayList<String>();
-		base.add("æ­¦å™¨");
-		base.add("æˆ˜äº‰");
-		base.add("æˆ˜åœº");
-		base.add("å®éªŒå®¤");
-		base.add("ç¾å›½");
-		base.add("å°æ¹¾");
-		base.add("å¯¼å¼¹");
-		base.add("ä½œæˆ˜");
-		base.add("å†›åŒº");
+	
+		File file = new File("data/TS");
+		HashMap<String,Double> base = new HashMap<String,Double>();
+		base.put("ÎäÆ÷",1.0);
+		base.put("Õ½Õù",1.0);
+		base.put("¾ü¶Ó",1.0);
+		base.put("ÃÀ¹ú",1.0);
+		base.put("×°±¸",1.0);
+		base.put("Õ½³¡",1.0);
+		base.put("×÷Õ½",1.0);
+		base.put("ÊµÑéÊÒ",1.0);
+		base.put("µ¼µ¯",1.0);
 		TSWordDistribution tsd = new TSWordDistribution(file); 
 		HashMap map = tsd.getWordFreguency();
 		Set<String> keys = map.keySet();
 		for(String key:keys){
 			HashMap m = (HashMap) map.get(key);
-			TxtToVector tv = new TxtToVector(key,m, base,false);
-			TxtVector vector = tv.getVector();
+			TxtVector tv = new TxtVector(m, base);
+			double[] vector = tv.getVector();
 			System.out.print(key+":---");
-			double[] vec = vector.getVector();
-			for(double d:vec)
+			for(double d:vector)
 				System.out.print(d+" ");
 			System.out.println();
 		}
