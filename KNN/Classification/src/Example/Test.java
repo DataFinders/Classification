@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Set;
 import com.chenlb.mmseg4j.example.MMseg4j;
 
+import main.BaseVectors;
+import main.KNNClassiFier;
 import util.TSWordDistribution;
 import util.TxtToVector;
 //import util.TxtVector;
@@ -29,7 +31,7 @@ public class Test {
 		for(String s:keys){
 			System.out.println(s+":"+map.get(s));
 		}*/
-		System.out.println();
+		/*System.out.println();
 		File file = new File("data/TrainingSet");
 		ArrayList<String> base = new ArrayList<String>();
 		base.add("武器");
@@ -54,6 +56,19 @@ public class Test {
 				System.out.print(d+" ");
 			System.out.println();
 		}
+		System.out.println("*************************************************************************");
+		BaseVectors bvs = new BaseVectors(base, tsd.getWordFreguency());
+		ArrayList<TxtVector> baseVectors = bvs.getBaseVectors();
+		for(TxtVector baseVector:baseVectors){
+			String fileName = baseVector.getFileName();
+			double[] vector = baseVector.getVector();
+			String kind = baseVector.getKind();
+			System.out.print(fileName+"------");
+			for(double v:vector)
+				System.out.print(v+" ");
+			System.out.println();
+		}*/
+//		System.out.println( Math.log(16)/Math.log(2)-Math.log(2)/Math.log(2));
 		/*for(String key:keys){
 			System.out.println(key);
 			HashMap m = (HashMap) map.get(key);
@@ -89,6 +104,10 @@ public class Test {
 			e.printStackTrace();
 		}*/
 		
+		
+		File file = new File("D:\\84.txt");
+		KNNClassiFier kc = new KNNClassiFier(file);
+		System.out.println(kc.getTV().getKind());
 	}
 	
 }

@@ -12,13 +12,13 @@ import util.TxtVector;
  * @author zy
  *	获得训练集的文本向量集合
  */
-public class GetBaseVector {
+public class BaseVectors {
 	
 	private ArrayList<TxtVector> baseVectors;	//训练集的文本向量集合
 	private ArrayList<String> baseWords;	//初始特征值集合
 	private HashMap<String, HashMap<String, Double>> wordFreguency;		//训练集文本分词处理后的结果
 	
-	public GetBaseVector(ArrayList<String> baseWords,HashMap<String, HashMap<String, Double>> wordFreguency){
+	public BaseVectors(ArrayList<String> baseWords,HashMap<String, HashMap<String, Double>> wordFreguency){
 		this.baseWords = baseWords;
 		this.wordFreguency = wordFreguency;
 		this.baseVectors = new ArrayList<TxtVector>();

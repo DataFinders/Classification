@@ -10,15 +10,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class TF_IDF {
-	public static File file = new File("data/TS");
+	public static File file = new File("data/TrainingSet");
 	public static HashMap<String, Double> wordDistribution;
 	public static HashMap<String, HashMap<String, Double>> wordFreguency;
 	private static HashMap<String, Double> tfidfHashMap = new HashMap<String, Double>();;
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 
 		// 初始化 WordDistribution
-		WordDistribution wD = new WordDistribution(file);
+		TSWordDistribution wD = new TSWordDistribution(file);
 		// 取出 两类参数
 		wordDistribution = wD.getWordDistribution();
 		wordFreguency = wD.getWordFreguency();
@@ -29,7 +29,7 @@ public class TF_IDF {
 		for (Entry<String, Double> outY : y.entrySet()) {
 			System.out.println(outY.getKey() + " : " + outY.getValue());
 		}
-	}
+	}*/
 
 	public HashMap<String, Double> getTfidfHashMap() {
 		return tfidfHashMap;
@@ -105,10 +105,10 @@ public class TF_IDF {
 			tF = ciPin / maxCiPin;
 			ciWen = d0.get(key);
 			iDF = Math.log(d0.size()) / Math.log(2) - Math.log(ciWen) / Math.log(2);
-			tfIdf = tF * iDF;
-			// System.out.println(key + ":" + ciPin + "\nciPin:" + ciPin +
-			// "\ntF:" + tF + "\nciWen:" + ciWen + "\nIdf:"
-			// + iDF + "\ntfIdf:" + tfIdf);
+			tfIdf = tF * iDF*10;
+			 /*System.out.println(key + ":" + ciPin + "\nciPin:" + ciPin +
+			"\ntF:" + tF + "\nciWen:" + ciWen + "\nIdf:"
+			+ iDF + "\ntfIdf:" + tfIdf);*/
 			re.put(key, tfIdf);
 			count1++;
 		}
