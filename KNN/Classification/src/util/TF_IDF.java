@@ -8,12 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 public class TF_IDF {
-	public static File file = new File("data/TrainingSet");
 	public static HashMap<String, Double> wordDistribution;
 	public static HashMap<String, HashMap<String, Double>> wordFreguency;
-	private static HashMap<String, Double> tfidfHashMap = new HashMap<String, Double>();;
+	private static HashMap<String, Double> tfidfHashMap = new HashMap<String, Double>();
 
 	/*public static void main(String[] args) {
 
@@ -61,14 +61,18 @@ public class TF_IDF {
 			// 根据 tfidf值 取出每个文件的前20关键词
 			count0 = 0;
 			for (Map.Entry<String, Double> mapping0 : list0) {
-				// System.out.println(mapping0.getKey() + " : " +
-				// mapping0.getValue());
+				/*System.out.println(mapping0.getKey() + " : " +
+				mapping0.getValue());*/
 				tfidfHashMap.put(mapping0.getKey(), (double) 0);
 				count0++;
-				if (count0 == 20) {
+				if (count0 == 1) {
 					// System.out.println("------------");
 					break;
 				}
+			}
+			Set<String> set = tfidfHashMap.keySet();
+			for(String s:set){
+				//System.out.println(s);
 			}
 		}
 	}
@@ -105,7 +109,7 @@ public class TF_IDF {
 			tF = ciPin / maxCiPin;
 			ciWen = d0.get(key);
 			iDF = Math.log(d0.size()) / Math.log(2) - Math.log(ciWen) / Math.log(2);
-			tfIdf = tF * iDF*10;
+			tfIdf = tF * iDF;
 			 /*System.out.println(key + ":" + ciPin + "\nciPin:" + ciPin +
 			"\ntF:" + tF + "\nciWen:" + ciWen + "\nIdf:"
 			+ iDF + "\ntfIdf:" + tfIdf);*/

@@ -20,8 +20,6 @@ public class TxtToVector {
 	 */
 	public TxtToVector(String fileName,HashMap<String,Double> content,List<String> base,boolean isTRSet){
 		this.content = content;
-		//this.base = new ArrayList<String>();
-		
 		this.base = base;
 		this.vector = new TxtVector(fileName, isTRSet);
 		this.vec = new double[base.size()];
