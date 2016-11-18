@@ -1,5 +1,6 @@
 package util;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -7,46 +8,74 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 public class TF_IDF {
-	public static HashMap<String, Double> wordDistribution;
+	public HashMap<String, Double> wordDistribution;
 	public static HashMap<String, HashMap<String, Double>> wordFreguency;
-	private static HashMap<String, Double> tfidfHashMap = new HashMap<String, Double>();
+	public static HashMap<String, HashMap<String, Double>> wordClassDistribution;
+	// wordFreguency 的子 hashmap
+	public HashMap<String, Double> wordFreguencySon;
+	public static HashMap<String, Double> clssss;
+	// public static void main(String[] args) {
+	// // 初始化 WordDistribution
+	// TSWordDistribution wD = new TSWordDistribution(new
+	// File("data/TrainingSet"));
+	// // 取出 两类参数
+	// HashMap<String, Double> Distribution = wD.getWordDistribution();
+	// HashMap<String, HashMap<String, Double>> Freguency =
+	// wD.getWordFreguency();
+	// HashMap<String, HashMap<String, Double>> classFreguency =
+	// wD.getWordClassDistribution();
+	// // 初始化TF_IDF 类
+	// TF_IDF x = new TF_IDF(Distribution, Freguency, classFreguency);
+	// HashMap<String, HashMap<String, Double>> baseTF_idf_df =
+	// x.baseTF_idf_df();
+	//
+	// for (Entry<String, HashMap<String, Double>> d : baseTF_idf_df.entrySet())
+	// {
+	// System.out.print(d.getKey() + ":");
+	// for (Entry<String, Double> mapping0 : d.getValue().entrySet()) {
+	// System.out.print(mapping0.getKey() + ":" + mapping0.getValue() + "--");
+	// }
+	// System.out.print("\n");
+	// }
+	//
+	// }
 
-	/*public static void main(String[] args) {
-
-		// 初始化 WordDistribution
-		TSWordDistribution wD = new TSWordDistribution(file);
-		// 取出 两类参数
-		wordDistribution = wD.getWordDistribution();
-		wordFreguency = wD.getWordFreguency();
-		// 初始化 TF_IDF 类
-		TF_IDF x = new TF_IDF(wordDistribution, wordFreguency);
-		HashMap<String, Double> y = x.getTfidfHashMap();
-		// 循环输出
-		for (Entry<String, Double> outY : y.entrySet()) {
-			System.out.println(outY.getKey() + " : " + outY.getValue());
+	public TF_IDF(HashMap<String, Double> wordDistribution, HashMap<String, HashMap<String, Double>> wordFreguency,
+			HashMap<String, HashMap<String, Double>> wordClassDistribution) {
+		// 存入基本参数
+		this.wordDistribution = wordDistribution;
+		TF_IDF.wordFreguency = wordFreguency;
+		TF_IDF.wordClassDistribution = wordClassDistribution;
+		// 识别出类的数量，及文本数
+		clssss = new HashMap<String, Double>();
+		for (Entry<String, HashMap<String, Double>> names : wordFreguency.entrySet()) {
+			//
+			String keyy = names.getKey();
+			String kindd = keyy.split("[.]")[0].split("-")[1];
+			if (clssss.containsKey(kindd)) {
+				clssss.put(kindd, clssss.get(kindd) + 1.0);
+			} else {
+				clssss.put(kindd, 1.0);
+			}
 		}
-	}*/
-
-	public HashMap<String, Double> getTfidfHashMap() {
-		return tfidfHashMap;
 	}
 
-	public TF_IDF(HashMap<String, Double> wordDistribution, HashMap<String, HashMap<String, Double>> wordFreguency) {
-		int count0;
+	// 使用 calculate()计算训练集词项集合 ----> tf-idf-df
+	public HashMap<String, Double> tfidfHashMap() {
+		// 初始特征值向量
+		HashMap<String, Double> tfidfHashMap = new HashMap<String, Double>();
 		// 遍历 wordFreguency
+		int count0;
 		for (Entry<String, HashMap<String, Double>> entryFreguency : wordFreguency.entrySet()) {
 			// 文件名
 			String k0 = entryFreguency.getKey();
-			// System.out.println(k0);
-			// 文件对应的词项
 			HashMap<String, Double> v0 = entryFreguency.getValue();
 			// System.out.println("文本个数" + wordFreguency.size());
 
-			// **********获取 tfidf 值
-			HashMap<String, Double> re = calculate(wordDistribution, v0, wordFreguency.size());
+			// **********获取 tf_id_fdf 值
+			HashMap<String, Double> re = calculate(k0, wordDistribution, v0, wordFreguency.size());
 
 			// 对 tfidf 的 HashMap 排序
 			List<Entry<String, Double>> list0 = new ArrayList<Entry<String, Double>>(re.entrySet());
@@ -60,34 +89,43 @@ public class TF_IDF {
 			// 根据 tfidf值 取出每个文件的前20关键词
 			count0 = 0;
 			for (Map.Entry<String, Double> mapping0 : list0) {
-				/*System.out.println(mapping0.getKey() + " : " +
-				mapping0.getValue());*/
-				tfidfHashMap.put(mapping0.getKey(), (double) 0);
+				/*
+				 * System.out.println(mapping0.getKey() + " : " +
+				 * mapping0.getValue());
+				 */
+				tfidfHashMap.put(mapping0.getKey(), 0.0);
 				count0++;
-				if (count0 == 1) {
+				if (count0 == 20) {
 					// System.out.println("------------");
 					break;
 				}
 			}
-			Set<String> set = tfidfHashMap.keySet();
-			for(String s:set){
-				//System.out.println(s);
-			}
+			// Set<String> set = tfidfHashMap.keySet();
+			// for (String s : set) {
+			// System.out.println(s);
+			// }
 		}
+		return tfidfHashMap;
 	}
 
-	public static HashMap<String, Double> calculate(HashMap<String, Double> d0, HashMap<String, Double> v1, int sum) {
+	// 训练集单个文本的 tf-idf 值
+	public static HashMap<String, Double> calculate(String fileName, HashMap<String, Double> d0,
+			HashMap<String, Double> v1, int sum) {
 		// 定义返回值
 		HashMap<String, Double> re = new HashMap<String, Double>();
+
+		HashMap<String, Double> classs = new HashMap<String, Double>();
 		// ciPin: 词在文章中的次数 即 value
 		// maxCiPin: 该文出现最多的词在文章中的出现次数
 		// tF
 		// iDF
 		// ciWen 出现该词的文档个数
 		// tfIdf
-		String key;
-		Double ciPin = null, maxCiPin = null, tF = null, iDF = null, ciWen = null, tfIdf = null;
-		int count1 = 0;
+		String key, kind;
+		Double ciPin = null, maxCiPin = null, tF = null, iDF = null, ciWen = null, tfIdfdf = null, df = null;
+		int count1 = 0, classsS = 0;
+		kind = fileName.split("[.]")[0].split("-")[1];
+
 		// 初始化为 List<> 进行降序排序
 		List<Entry<String, Double>> list1 = new ArrayList<Entry<String, Double>>(v1.entrySet());
 		Collections.sort(list1, new Comparator<Map.Entry<String, Double>>() {
@@ -105,16 +143,157 @@ public class TF_IDF {
 			if (count1 == 0) {
 				maxCiPin = mapping1.getValue();
 			}
+			classs = wordClassDistribution.get(key);
 			tF = ciPin / maxCiPin;
 			ciWen = d0.get(key);
 			iDF = Math.log(d0.size()) / Math.log(2) - Math.log(ciWen) / Math.log(2);
-			tfIdf = tF * iDF;
-			 /*System.out.println(key + ":" + ciPin + "\nciPin:" + ciPin +
-			"\ntF:" + tF + "\nciWen:" + ciWen + "\nIdf:"
-			+ iDF + "\ntfIdf:" + tfIdf);*/
-			re.put(key, tfIdf);
+			df = Math.log(classs.get(kind)) / Math.log(2) - Math.log(clssss.get(kind)) / Math.log(2);
+			tfIdfdf = (tF * iDF) / (-df);
+
+			/*
+			 * System.out.println(key + ":" + "\nciPin:" + ciPin + "\nmaxCiPin:"
+			 * + maxCiPin + "\ntF:" + tF + "\nciWen:" + ciWen + "\nIdf:" + iDF +
+			 * "\ndf" + df + "\ntfIdfdf:" + tfIdfdf);
+			 */
+
+			re.put(key, tfIdfdf);
 			count1++;
 		}
 		return re;
 	}
+
+	// 训练集tf_idf_df值
+	public HashMap<String, HashMap<String, Double>> baseTF_idf_df() {
+		HashMap<String, Double> vv;
+		HashMap<String, HashMap<String, Double>> baseTF_idf_df = new HashMap<String, HashMap<String, Double>>();
+		for (Entry<String, HashMap<String, Double>> entryFreguency : wordFreguency.entrySet()) {
+			String k1 = entryFreguency.getKey();
+			HashMap<String, Double> v0 = entryFreguency.getValue();
+			// **********获取 tfidf 值
+			HashMap<String, Double> re = calculate(k1, wordDistribution, v0, wordFreguency.size());
+
+			// 对 tfidf 的 HashMap 排序
+			vv = new HashMap<String, Double>();
+			for (Entry<String, Double> mapping0 : re.entrySet()) {
+				vv.put(mapping0.getKey(), mapping0.getValue());
+			}
+			baseTF_idf_df.put(k1, vv);
+		}
+		return baseTF_idf_df;
+	}
+
+	// 单个测试文件的tfidf值
+	public HashMap<String, Double> calculateOne(File file) {
+		// 定义测试集返回值
+		HashMap<String, Double> calculateOne = new HashMap<String, Double>();
+		// 文本预处理结果
+		HashMap<String, Double> in = new HashMap<String, Double>();
+
+		// 文本预处理
+		TxtPreprocessing txtp = new TxtPreprocessing(file);
+
+		in = txtp.getWordFreguency();
+
+		// ciPin: 词在文章中的次数 即 value
+		// maxCiPin: 该文出现最多的词在文章中的出现次数
+		// tF
+		// iDF
+		// ciWen 出现该词的文档个数
+		// tfIdf
+		String key;
+		Double ciPin = null, maxCiPin = null, tF = null, iDF = null, ciWen = null, tfIdf = null;
+		int count2 = 0;
+		// 初始化为 List<> 进行降序排序
+		List<Entry<String, Double>> list2 = new ArrayList<Entry<String, Double>>(in.entrySet());
+		Collections.sort(list2, new Comparator<Map.Entry<String, Double>>() {
+			// 降序排序
+			public int compare(Entry<String, Double> o1, Entry<String, Double> o2) {
+				// return o1.getValue().compareTo(o2.getValue());
+				return o2.getValue().compareTo(o1.getValue());
+			}
+		});
+		for (Map.Entry<String, Double> mapping1 : list2) {
+			// key 及 value
+			key = mapping1.getKey();
+			ciPin = mapping1.getValue();
+			// 取出频率最高的词
+			if (count2 == 0) {
+				maxCiPin = mapping1.getValue();
+			}
+			tF = ciPin / maxCiPin;
+			ciWen = wordDistribution.get(key);
+			iDF = Math.log(wordDistribution.size()) / Math.log(2) - Math.log(ciWen) / Math.log(2);
+			tfIdf = tF * iDF;
+			/*
+			 * System.out.println(key + ":" + ciPin + "\nciPin:" + ciPin +
+			 * "\ntF:" + tF + "\nciWen:" + ciWen + "\nIdf:" + iDF + "\ntfIdf:" +
+			 * tfIdf);
+			 */
+			calculateOne.put(key, tfIdf);
+			count2++;
+		}
+		return calculateOne;
+	}
+
+	// 测试集（包含多个测试文件）tf_idf值
+	public HashMap<String, HashMap<String, Double>> calculateAll(File file) {
+		// 定义测试集返回值
+		HashMap<String, HashMap<String, Double>> calculateAll = new HashMap<String, HashMap<String, Double>>();
+		HashMap<String, Double> calculate = new HashMap<String, Double>();
+		// 单个文本预处理结果
+		HashMap<String, Double> in = new HashMap<String, Double>();
+
+		// 文本预处理
+		TSWordDistribution testGroup = new TSWordDistribution(file);
+		HashMap<String, Double> testDistribution = testGroup.getWordDistribution();
+		HashMap<String, HashMap<String, Double>> testFreguency = testGroup.getWordFreguency();
+		// 遍历测试集
+		for (Entry<String, HashMap<String, Double>> entryFreguency : testFreguency.entrySet()) {
+			// ciPin: 词在文章中的次数 即 value
+			// maxCiPin: 该文出现最多的词在文章中的出现次数
+			// tF
+			// iDF
+			// ciWen 出现该词的文档个数
+			// tfIdf
+			String key;
+			Double ciPin = null, maxCiPin = null, tF = null, iDF = null, ciWen = null, tfIdf = null;
+			int count2 = 0;
+			// 取出 value 值
+			in = entryFreguency.getValue();
+			// 排序
+			List<Entry<String, Double>> list3 = new ArrayList<Entry<String, Double>>(in.entrySet());
+			Collections.sort(list3, new Comparator<Map.Entry<String, Double>>() {
+				// 降序排序
+				public int compare(Entry<String, Double> o1, Entry<String, Double> o2) {
+					// return o1.getValue().compareTo(o2.getValue());
+					return o2.getValue().compareTo(o1.getValue());
+				}
+			});
+			for (Map.Entry<String, Double> entry : list3) {
+				// key 及 value
+				key = entry.getKey();
+				ciPin = entry.getValue();
+				// 取出频率最高的词
+				if (count2 == 0) {
+					maxCiPin = entry.getValue();
+				}
+				tF = ciPin / maxCiPin;
+				ciWen = wordDistribution.get(key) + testDistribution.get(key);
+				iDF = Math.log(wordDistribution.size() + testFreguency.size()) / Math.log(2)
+						- Math.log(ciWen) / Math.log(2);
+				tfIdf = tF * iDF;
+				/*
+				 * System.out.println(key + ":" + ciPin + "\nciPin:" + ciPin +
+				 * "\ntF:" + tF + "\nciWen:" + ciWen + "\nIdf:" + iDF +
+				 * "\ntfIdf:" + tfIdf);
+				 */
+				calculate.put(key, tfIdf);
+
+				count2++;
+			}
+			calculateAll.put(entryFreguency.getKey(), calculate);
+		}
+		return calculateAll;
+	}
+
 }
