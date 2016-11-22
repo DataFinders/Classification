@@ -25,15 +25,20 @@ public class KNNClassiFier {
 	private HashMap fileWordCount;
 
 	public KNNClassiFier() {
+
 		this.trsWD = new TSWordDistribution(new File("data/TrainingSet"));
 		this.baseWords = new ArrayList<String>();
 		// 获得训练集学习获得的词项集合
 		TF_IDF ti = new TF_IDF(trsWD.getWordDistribution(), trsWD.getWordFreguency(), trsWD.getWordClassDistribution());
 		HashMap<String, Double> y = ti.tfidfHashMap();
+		// 统计词项集合个数
+		int sum = 0;
 		for (Entry<String, Double> outY : y.entrySet()) {
 			baseWords.add(outY.getKey());
+			sum++;
 			System.out.println(outY.getKey());
 		}
+		System.out.println(sum + "个词项");
 		// 获得训练集向量集合
 		bvs = new BaseVectors(baseWords, ti.baseTF_idf_df());
 
@@ -63,10 +68,10 @@ public class KNNClassiFier {
 		HashMap<String, Double> distance = getDistance(fileTV);
 		// System.out.println(distance.size());
 
-		// 取出距离测试文本最近的10个训练文本
+		// 取出距离测试文本最近的 n 个训练文本
 		List<Entry<String, Double>> list = new ArrayList<Entry<String, Double>>(distance.entrySet());
 		Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
-			// 降序排序
+			// 升序排序
 			public int compare(Entry<String, Double> o1, Entry<String, Double> o2) {
 				// return o1.getValue().compareTo(o2.getValue());
 				return o1.getValue().compareTo(o2.getValue());
@@ -82,18 +87,28 @@ public class KNNClassiFier {
 			}
 		}
 		// 判断类别
-		int count_14 = 0, count_24 = 0;
-		for (String l : List) {
-			// System.out.println(l);
-			if (l.endsWith("14.txt"))
-				count_14++;
-			else
-				count_24++;
-		}
-		tv.setKind((count_14 >= count_24) ? ("" + 14) : ("" + 24));
-		// System.out.println(count_14 + ":" + count_24);
-		// System.out.println(tv.getFileName() + "---" + tv.getKind());
+		HashMap<String, Double> kind = new HashMap<String, Double>();
+		String kindd = "";
 
+		for (String l : List) {
+			kindd = l.split("[.]")[0].split("-")[1];
+			if (kind.containsKey(kindd)) {
+				kind.put(kindd, kind.get(kindd) + 1.0);
+			} else {
+				kind.put(kindd, 1.0);
+			}
+		}
+
+		List<Entry<String, Double>> list1 = new ArrayList<Entry<String, Double>>(kind.entrySet());
+		Collections.sort(list1, new Comparator<Map.Entry<String, Double>>() {
+			// 降序排序
+			public int compare(Entry<String, Double> o1, Entry<String, Double> o2) {
+				// return o1.getValue().compareTo(o2.getValue());
+				return o2.getValue().compareTo(o1.getValue());
+			}
+		});
+		tv.setKind(list1.get(0).getKey());
+		// System.out.println(list1.toString() + list1.get(0).getKey());
 	}
 
 	private HashMap<String, Double> getDistance(TxtVector fileTV) {

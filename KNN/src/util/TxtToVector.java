@@ -31,7 +31,7 @@ public class TxtToVector {
 	private void ToVector() {
 		for (int i = 0; i < base.size(); i++) { // 遍历初始特征向量，判断当前特征项是否出现于文本内容中
 			String key = base.get(i);
-			if (content.containsKey(key)) // 若当前特征项是否出现于文本内容中，则该向量点置为1
+			if (content.containsKey(key)) // 若当前特征项是否出现于文本内容中，则该向量点置为该文本的tf_idf_df值
 				vec[i] = content.get(key);
 		}
 	}

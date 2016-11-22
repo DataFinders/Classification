@@ -123,7 +123,7 @@ public class TF_IDF {
 		// tfIdf
 		String key, kind;
 		Double ciPin = null, maxCiPin = null, tF = null, iDF = null, ciWen = null, tfIdfdf = null, df = null;
-		int count1 = 0, classsS = 0;
+		int count1 = 0;
 		kind = fileName.split("[.]")[0].split("-")[1];
 
 		// 初始化为 List<> 进行降序排序
