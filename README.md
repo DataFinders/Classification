@@ -7,7 +7,9 @@
 #### 1.HashMap\<String,Double\> wordDistribution;  
 	key：词项  value：包含该词项的文本书
 #### 2.HashMap\<String,HashMap\<String, Double\>\> wordFreguency;
-	key：文本名k1   value{HashMap<String, Double> key：词项  value：在文本k1出现的次数}
+	key：文本名k1  value{HashMap<String, Double> key:词项  value:在文本k1出现的次数}
+#### 3.HashMap\<String, HashMap\<String, Double\>\> wordClassDistribution;
+	key：词项  value{HashMap<String, Double> key:类型  value:在此类文本中出现的次数}
 ## 三.计算TF-IDF（秦龙）
 ###单个文件的TF-IDF值
 > `HashMap<String, Double>` calculate ( `HashMap<String, Double>` d0, `HashMap<String, Double>` v1, int sum )

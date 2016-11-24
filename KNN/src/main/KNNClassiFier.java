@@ -71,10 +71,10 @@ public class KNNClassiFier {
 		// 取出距离测试文本最近的 n 个训练文本
 		List<Entry<String, Double>> list = new ArrayList<Entry<String, Double>>(distance.entrySet());
 		Collections.sort(list, new Comparator<Map.Entry<String, Double>>() {
-			// 升序排序
+			// 降序排序
 			public int compare(Entry<String, Double> o1, Entry<String, Double> o2) {
 				// return o1.getValue().compareTo(o2.getValue());
-				return o1.getValue().compareTo(o2.getValue());
+				return o2.getValue().compareTo(o1.getValue());
 			}
 		});
 		ArrayList<String> List = new ArrayList<>();
@@ -82,7 +82,7 @@ public class KNNClassiFier {
 		for (Map.Entry<String, Double> mapping0 : list) {
 			List.add(mapping0.getKey());
 			count0++;
-			if (count0 == 20) {
+			if (count0 == 15) {
 				break;
 			}
 		}
@@ -114,13 +114,18 @@ public class KNNClassiFier {
 	private HashMap<String, Double> getDistance(TxtVector fileTV) {
 		HashMap<String, Double> distance = new HashMap<>();
 		double[] fileVector = fileTV.getVector();
+
 		for (TxtVector baseVector : baseVectors) {
+			double sum = 0, fenMu1 = 0, fenMu2 = 0;
 			double[] vector = baseVector.getVector();
-			double sum = 0;
 			for (int i = 0; i < vector.length; i++) {
-				sum += (fileVector[i] - vector[i]) * (fileVector[i] - vector[i]);
+				sum += fileVector[i] * vector[i];
+				fenMu1 += fileVector[i] * fileVector[i];
+				fenMu2 += vector[i] * vector[i];
 			}
-			distance.put(baseVector.getFileName(), sum);
+			// System.out.println(sum / (Math.sqrt(fenMu1) *
+			// Math.sqrt(fenMu2)));
+			distance.put(baseVector.getFileName(), sum / (Math.sqrt(fenMu1) * Math.sqrt(fenMu2)));
 		}
 		return distance;
 	}

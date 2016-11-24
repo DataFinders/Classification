@@ -9,7 +9,7 @@ import main.KNNClassiFier;
 public class Test {
 	public static void main(String[] args) {
 
-		float startTime = System.currentTimeMillis();
+		long startTime = System.currentTimeMillis();
 		File file24 = new File("C:\\军事-24\\testall");
 		File file14 = new File("C:\\体育-14\\testall");
 		File file13 = new File("C:\\医学-13\\testall");
@@ -36,8 +36,8 @@ public class Test {
 			outResult += classs[i] + "类准确率为：" + (count / files.length * 100) + "%\n";
 		}
 
-		float endTime = System.currentTimeMillis();
+		long endTime = System.currentTimeMillis();
 		System.out.println(outResult);// 输出结果
-		System.out.println("耗时：" + (endTime - startTime) + "s");
+		System.out.println("耗时：" + (endTime - startTime) / 1000 + "s");
 	}
 }
