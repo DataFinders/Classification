@@ -79,7 +79,7 @@ public class TF_IDF {
 			for (int i = 0; i < num.size(); i++) {
 				sd += Math.pow((avg - num.get(i)) / abc, 2);
 			}
-			System.out.println("ºÍ :" + sd);
+			System.out.println("sum:" + sd);
 			sd = Math.sqrt((sd / clssss.size()));
 			System.out.println("#" + n1.getKey() + ":" + sd + "\n-------------");
 			// ±ê×¼²î·¶Î§
@@ -119,7 +119,7 @@ public class TF_IDF {
 			for (Map.Entry<String, Double> mapping0 : list0) {
 				tfidfHashMap.put(mapping0.getKey(), 0.0);
 				count0++;
-				if (count0 == 30) {
+				if (count0 == 20) {
 					// System.out.println("------------");
 					break;
 				}
